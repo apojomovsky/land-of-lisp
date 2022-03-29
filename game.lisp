@@ -101,12 +101,12 @@
   (when lst
   (let ((item (car lst))
         (rest (cdr lst)))
-    (cond ((eq item #\space) (cons item (tweak-text rest caps lit)))
-          ((member item '(#\! #\? #\? #\.)) (cons item (tweak-text rest t lit)))
-          ((eq item #\") (tweak-text rest caps (not lit)))
-            (lit (cons item (tweak-text rest nil lit)))
-          ((or caps lit) (cons (char-upcase item) (tweak-text rest nil lit)))
-          (t (cons (char-downcase item) (tweak-text rest nil nil)))))))))
+       (cond ((eq item #\space) (cons item (tweak-text rest caps lit)))
+             ((member item '(#\! #\? #\? #\.)) (cons item (tweak-text rest t lit)))
+             ((eq item #\") (tweak-text rest caps (not lit)))
+             (lit (cons item (tweak-text rest nil lit)))
+             ((or caps lit) (cons (char-upcase item) (tweak-text rest nil lit)))
+             (t (cons (char-downcase item) (tweak-text rest nil nil)))))))
 
 (defun game-print (lst)
   (princ (coerce (tweak-text (coerce (string-trim "() "
@@ -116,3 +116,15 @@
                               nil)
                   'string))
   (fresh-line))
+
+(defparameter *wizard-nodes* '((living-room (you are in the living-room.
+                             a wizard is snoring loudly on the couch.))
+                        (garden (you are in a beautiful garden.
+                             there is a well in front of you.))
+                        (attic (you are in the attic.
+                             there is a giant welding torch in the corner.))))
+
+(defparameter *wizard-edges* '((living-room (garden west door)
+                                     (attic upstairs ladder))
+                        (garden (living-room east door))
+                        (attic (living-room downstairs ladder))))
